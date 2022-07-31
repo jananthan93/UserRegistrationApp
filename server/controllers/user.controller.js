@@ -7,11 +7,11 @@ exports.getAllUsers = (req, res) => {
                 error: err
             });
         }
-        results = users.map(user=>{
-            const { _id,firstName, lastName, email, phone,gender } = user
-            return { firstName, lastName, email, phone,gender,id:_id }
+        results = users.filter(user=>user.role==='user').map(user=>{
+            const { _id,firstName, lastName, email, phone,gender,role } = user
+            return { firstName, lastName, email, phone,gender,id:_id,role }
         })
-        res.status(200).json({ 
+        res.status(200).json({
             message: 'Get all users Successfully',
             results
           });
@@ -43,9 +43,9 @@ exports.getUserById=(req, res) => {
               errors: err
             }); 
         }else{
-            const { _id,firstName, lastName, email, phone,gender } = user
+            const { _id,firstName, lastName, email, phone,gender,role } = user
             res.status(200).json({
-                results:{ _id,firstName, lastName, email, phone,gender },
+                results:{ id:_id,firstName, lastName, email, phone,gender,role },
                 message: 'User retrieved Successfully'
               });
         }

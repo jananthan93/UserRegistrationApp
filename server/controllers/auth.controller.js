@@ -34,7 +34,7 @@ try {
     });
 
     res.status(201).json({
-        message: 'User Registered Successfully'
+        message: 'You have Successfully Registered. Please Login to the System'
       });
   } catch (err) {
     console.log(err);
@@ -55,7 +55,7 @@ exports.login = async(req,res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
           // Create token
           const token = jwt.sign(
-            { user_id: user._id, email },
+            { userId: user._id,role:user.role },
             process.env.TOKEN_KEY,
             {
               expiresIn: "2h",
@@ -67,7 +67,7 @@ exports.login = async(req,res) => {
                 user,
                 token
             },
-            message: 'User Login Successfully'
+            message: 'You have Successfully Logged In'
           });
         }
         return res.status(400).send("Invalid Credentials");

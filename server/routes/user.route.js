@@ -5,7 +5,7 @@ const { getAllUsers,getUserById, updateUserById, deleteUserById} = require('../c
 
 
 router.get('/users',auth,getAllUsers);
-router.get('/users/:id',getUserById);
-router.put('/users/:id',updateUserById);
-router.delete('/users/:id',deleteUserById);
+router.get('/users/:id',auth,getUserById);
+router.put('/users/:id',auth,updateUserById);
+router.delete('/users/:id',auth,deleteUserById);
 module.exports = router;
