@@ -1,5 +1,6 @@
 import {
     Button,
+    Card,
     Col,
     Form,
     Input,
@@ -7,20 +8,49 @@ import {
     Select,
   } from 'antd';
   import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { api } from '../../services/axios.service';
+import { ACCESS_TOKEN } from '../../utils/config';
+import { parseJwt } from '../../utils/jwt';
+import AuthLayout from '../AuthLayout';
   const { Option } = Select; 
   
-  const UserDetail = ({isEdit}) => {
+  const UserDetail = ({isProfile}) => {
+    let navigate=useNavigate()
     const [form] = Form.useForm();
     const [isEditable,setEditable]=useState(false)
-    useEffect(()=>{console.log(isEdit)
-        setEditable(isEdit)
-    },[isEdit])
+    const[user,setUser]=useState({})
+    let { id } = useParams();
+    const getUser=(uId)=>{
+      api('GET','users','token','',uId).then(res=>{
+        setUser(res.data.results)
+        form.setFieldsValue(res.data.results)
+      }).catch(err=>console.log(err))
+    }
+    useEffect(()=>{console.log(isProfile)
+        setEditable(!isProfile)
+        if(isProfile){
+          let token = localStorage.getItem(ACCESS_TOKEN)
+          if(token){
+            const userId = parseJwt(token).userId
+            getUser(userId)
+          }
+        }else{
+          getUser(id)
+        }
+    },[isProfile])
+
     const onFinish = (values) => {
+      api('PUT','users','',values,values.id).then(res=>{
+        navigate('/users')
+      }).catch(err=>console.log(err))
       console.log('Received values of form: ', values);
     };
   return (
-    <Row className='container'>
+    <AuthLayout>
+    <Row style={{display:'flex',alignItems:'center',justifyContent:'center',paddingTop:50}}>
       <Col md={6}>
+      <Card>
       <Form
         form={form}
         name="register"
@@ -47,7 +77,12 @@ import {
         >
           <Input placeholder="Email" readOnly/>
         </Form.Item>
-  
+        <Form.Item
+          name="id"
+          hidden
+        >
+          <Input />
+        </Form.Item>
         <Form.Item
           name="firstName"
           label="First Name"
@@ -111,8 +146,7 @@ import {
        
         {isEditable&&<Form.Item >
           <Button type="primary" 
-        //   htmlType="submit" 
-        onClick={()=>setEditable(!isEditable)}
+          htmlType="submit" 
           >
             Update
           </Button>
@@ -129,8 +163,10 @@ import {
             
         }
       </Form>
+      </Card>
       </Col>
       </Row>
+    </AuthLayout>
       )
 }
 export default UserDetail;

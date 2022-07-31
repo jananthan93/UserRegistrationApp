@@ -1,6 +1,6 @@
 import {
-    AutoComplete,
     Button,
+    Card,
     Checkbox,
     Col,
     Form,
@@ -9,20 +9,24 @@ import {
     Select,
   } from 'antd';
   import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { api } from '../services/axios.service';
   const { Option } = Select; 
   
   const Register = () => {
+    let navigate =useNavigate()
     const [form] = Form.useForm();
   
     const onFinish = (values) => {
+      api('POST','auth/register','',values,'').then(res=>{
+        navigate('/')
+      }).catch(err=>console.log(err))
       console.log('Received values of form: ', values);
     };
-  
-    
     return (
         <Row className='container'>
       <Col md={6}>
+<Card>
 
       <Form
         form={form}
@@ -164,6 +168,7 @@ import { Link } from 'react-router-dom';
           You have an Account, please <Link to={"/"}>login now!</Link>
         </Form.Item>
       </Form>
+</Card>
       </Col>
       </Row>
     );

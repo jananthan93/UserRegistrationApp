@@ -1,27 +1,19 @@
-import { Col, Row, Space, Table } from 'antd';
-import React from 'react'
+import { Card, Col, Row, Space, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-const users =[
-    {
-        id:1,
-        email: "hfhf@ffhg.gdfh",
-        firstName: "hhfhf",
-        gender: "male",
-        lastName: "jhfffjf",
-        phone: "065746454474",
-        userName: "ttttada"
-    },
-    {
-        id:2,
-        email: "hfhf@ffhg.gdfh",
-        firstName: "ssggf",
-        gender: "male",
-        lastName: "llkl",
-        phone: "065746454474",
-        userName: "sddsf"
-    }
-]
+import { api } from '../../services/axios.service';
+import AuthLayout from '../AuthLayout';
+
 export default function Users() {
+  const [users,setUsers]=useState([]);
+  const getUsers=()=>{
+    api('GET','users','token','','')
+    .then(res=>setUsers(res.data.results))
+    .catch(err=>console.log(err))
+  }
+  useEffect(()=>{
+    getUsers()
+  },[])
     const columns = [
         {
           title: 'First Name',
@@ -30,10 +22,6 @@ export default function Users() {
         {
             title: 'Last Name',
             dataIndex: 'lastName',
-        },
-        {
-        title: 'User Name',
-        dataIndex: 'userName',
         },
         {
           title: 'Email',
@@ -52,11 +40,15 @@ export default function Users() {
       const data = users;
      
       return (
-      <Row className='usertable-container'>
-        <Col md={12}>
-        <h2>Showing All Users</h2>
-          <Table  columns={columns} dataSource={data} />
-        </Col>
-      </Row>
+        <AuthLayout>
+          <Row className='usertable-container'>
+            <Col md={12}>
+            <Card>
+            <h2>Showing All Users</h2>
+              <Table  columns={columns} dataSource={data}  pagination={false}/>
+            </Card>
+            </Col>
+          </Row>
+        </AuthLayout>
       )
 }

@@ -1,11 +1,22 @@
 import React from 'react';
-import { Route , Navigate} from 'react-router-dom';
-import Users from '../components/Users';
+import { Navigate} from 'react-router-dom';
+import { ACCESS_TOKEN, USER } from './config';
+import { parseJwt } from './jwt';
 
-export const PrivateRoute = ({ element:Element,loggedIn, ...rest }) => {
-   return ( 
-    loggedIn ? <Route {...rest} element={<Users />}/> : 
-                    <Navigate  to="/"/>
-        )
-                
-}
+export const PrivateRoute = ({
+        redirectPath = '/',
+        children,
+        path
+      }) => {
+        const token = localStorage.getItem(ACCESS_TOKEN)
+        if (!token) {
+                return <Navigate to={redirectPath} replace />;
+        }else{
+                const {userId,role} =parseJwt(token)
+                if(path.includes('users') && role===USER){
+                        return <Navigate to={"/dashboard"} replace />;
+                }
+        }
+      
+        return children;
+};

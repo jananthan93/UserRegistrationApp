@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from 'axios';
 import { ACCESS_TOKEN, API_URL } from '../utils/config';
 
@@ -14,10 +15,9 @@ const getHeaders = (token) => {
     const headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
     }
     return token != null ? {
-        headers:{...headers,Authorization: `Bearer ${(JSON.parse(localStorage.getItem(ACCESS_TOKEN)))}`}
+        headers:{...headers,"x-access-token": `${localStorage.getItem(ACCESS_TOKEN)}`}
     }  : { headers }
 };
 
@@ -37,7 +37,7 @@ export const api = (method, endpoint, token, body, params) => {
                     .catch((error) => {
                         console.log(error.response)
                         if(error?.response?.status==401){
-
+                            
                           }
                         reject(error);
                     });
@@ -50,6 +50,7 @@ export const api = (method, endpoint, token, body, params) => {
                 axios
                     .post(URL, body, getHeaders(token))
                     .then((response) => {
+                        response?.data?.message&&message.success(response.data.message)
                         resolve(response);
                     })
                     .catch((error) => {
@@ -64,6 +65,7 @@ export const api = (method, endpoint, token, body, params) => {
                 axios
                     .delete(URL, getHeaders(token))
                     .then((response) => {
+                        response?.data?.message&&message.success(response.data.message)
                         resolve(response);
                     })
                     .catch((error) => {
@@ -77,6 +79,7 @@ export const api = (method, endpoint, token, body, params) => {
                 axios
                     .put(URL, body, getHeaders(token))
                     .then((response) => {
+                        response?.data?.message&&message.success(response.data.message)
                         resolve(response);
                     })
                     .catch((error) => {
