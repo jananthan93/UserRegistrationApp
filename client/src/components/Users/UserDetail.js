@@ -1,6 +1,5 @@
 import {
     Button,
-    Checkbox,
     Col,
     Form,
     Input,
@@ -49,20 +48,6 @@ import {
           <Input placeholder="Email" readOnly/>
         </Form.Item>
   
-  
-        <Form.Item
-          name="userName"
-          label="User Name"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your username!',
-              whitespace: true,
-            },
-          ]}
-        >
-          <Input placeholder="User Name" disabled={!isEditable}/>
-        </Form.Item>
         <Form.Item
           name="firstName"
           label="First Name"

@@ -86,18 +86,6 @@ import { Link } from 'react-router-dom';
         </Form.Item>
   
         <Form.Item
-          name="userName"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your username!',
-              whitespace: true,
-            },
-          ]}
-        >
-          <Input placeholder="User Name"/>
-        </Form.Item>
-        <Form.Item
           name="firstName"
           rules={[
             {
