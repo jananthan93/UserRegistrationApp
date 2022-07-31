@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate} from 'react-router-dom';
 import { ACCESS_TOKEN, USER } from './config';
 import { parseJwt } from './jwt';
-
+const adminRoutes = ["users","users/:id"]
 export const PrivateRoute = ({
         redirectPath = '/',
         children,
@@ -13,9 +13,10 @@ export const PrivateRoute = ({
                 return <Navigate to={redirectPath} replace />;
         }else{
                 const {userId,role} =parseJwt(token)
-                if(path.includes('users') && role===USER){
+                if(adminRoutes.includes(path) && role===USER){
                         return <Navigate to={"/dashboard"} replace />;
                 }
+               
         }
       
         return children;

@@ -3,8 +3,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
-  useNavigate
+  Navigate
 } from "react-router-dom";
 import './app.css'
 import Dashboard from './components/Dashboard';
@@ -23,12 +22,32 @@ const App = () => {
             </PrivateRoute>
           }
         />
-      <Route path="/" element={ <Login />} />
-      <Route path="/dashboard" element={ <Dashboard />} />
-      <Route path="register" element={<Register />} />
-      {/* <Route path="users" element={<Users />} /> */}
-      <Route path="users/:id" element={<UserDetail isProfile={false}/>} />
-      <Route path="profile" element={<UserDetail isProfile={true}/>} />
+      <Route path="users/:id" element={
+          <PrivateRoute path={"users/:id"}>
+              <UserDetail isProfile={false}/>
+            </PrivateRoute>
+          }
+        />
+        
+         <Route path="profile" element={
+          <PrivateRoute path={"profile"}>
+              <UserDetail isProfile={true}/>
+            </PrivateRoute>
+          }
+        />
+        <Route path="dashboard" element={
+          <PrivateRoute path={"dashboard"}>
+              <Dashboard/>
+            </PrivateRoute>
+          }
+        />
+        <Route path="/" element={<Login/>}/>
+         <Route path="register" element={
+          <PrivateRoute path={"register"}>
+              <Register/>
+            </PrivateRoute>
+          }
+        />
       <Route  exact path="*" element={<Navigate to="/" replace={true} />} />;
     </Routes>
   </BrowserRouter>
