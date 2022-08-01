@@ -5,7 +5,7 @@ const express =require('express');
 const path = __dirname + '/client/build/';
 app.use(express.static(path));
 
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
   res.sendFile(path + 'index.html');
 });
 
